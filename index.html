@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskPro AI's Bot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#Home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#Contact">Contact</a></li>
+        </ul>
+    </nav>
+    <img src="C:\Users\PRADEEPAN\OneDrive\Desktop\api\bgimage.jpg" alt="Background Image" class="background-img">
+    <div class="container">
+        <h1>TaskPro AI</h1>
+        
+        <form id="chatForm">
+            <label for="message">Enter your message:</label>
+            <input type="text" id="message" name="message" required>
+            <button type="submit">Send</button>
+        </form>
+
+        <div class="response-container" id="responseContainer">
+            <!-- User input and bot response will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const messageInput = document.getElementById('message');
+            const responseContainer = document.getElementById('responseContainer');
+
+            try {
+                const response = await fetch('http://localhost:8000/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        message: messageInput.value,
+                    }),
+                });
+
+                const data = await response.json();
+
+                // Append the new response to the existing content
+                responseContainer.innerHTML += `
+                    <div class="response-item">
+                        <p class="user-text">User: ${data.user_input}</p>
+                        <p class="bot-text">Chatbot: ${data.bot_response}</p>
+                    </div>
+                `;
+
+                // Clear the input field after submitting
+                messageInput.value = '';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
