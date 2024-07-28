@@ -9,26 +9,26 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Set this to the specific origins you want to allow
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=True, #cookies
+    allow_methods=["*"], #get post put
+    allow_headers=["*"], 
 )
 
 @app.get("/")
 async def read_root():
-    return {"message": "Welcome to the chatbot API"}
+    return {"message": "Welcome to the chatbot API"} #welcome msg display
 
 @app.post("/chatbot")
 async def chatbot_post(message: str = Form(...)):
-    return await get_chatbot_response(message)
+    return await get_chatbot_response(message) #user input posted
 
 @app.get("/chatbot")
 async def chatbot_get(message: str):
-    return await get_chatbot_response(message)
+    return await get_chatbot_response(message) #queryparamater - to send msg to server in url
 
 @app.put("/chatbot")
 async def chatbot_put(message: str):
-    return await get_chatbot_response(message)
+    return await get_chatbot_response(message) #recives msg from client via url and returns response from chatbot
 
 
 async def get_chatbot_response(message: str):
