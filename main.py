@@ -32,22 +32,23 @@ async def chatbot_put(message: str):
 
 
 async def get_chatbot_response(message: str):
-    prompt = f"User: {message}\nChatbot: "
+    prompt = f"User: {message}\nChatbot: " #fstring used , responses stored in array to update memory
     chat_history = []
 
-    response = openai.ChatCompletion.create(
+    response = openai.ChatCompletion.create(  #This sends a request to the OpenAI API to get a response from the chatbot.
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a content generation assistant for small businesses who replies only to content generation queries,do not answer to any other queries."},
             {"role": "user", "content": "For example Can you help me write a content related stuff or contentfor my product or a product description"},
-            {"role": "user", "content": message},
+            {"role": "user", "content": message},  
         ]
     )
 
-    bot_response = response.choices[0].message["content"].strip()
-    chat_history.append(f"User: {message}\nChatbot: {bot_response}")
 
-    return {"user_input": message, "bot_response": bot_response}
+    bot_response = response.choices[0].message["content"].strip() #remove spaces
+    chat_history.append(f"User: {message}\nChatbot: {bot_response}") # add to memory
+
+    return {"user_input": message, "bot_response": bot_response} #returns message
 
 if __name__ == "__main__":
     import uvicorn
